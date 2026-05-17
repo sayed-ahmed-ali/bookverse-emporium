@@ -1,17 +1,24 @@
 import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BookCard } from "@/components/BookCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { books, categories } from "@/data/books";
+import { fetchBooks, type Book } from "@/lib/books";
+import { categories } from "@/data/books";
 
 const Shop = () => {
   const [query, setQuery] = useState("");
   const [activeCat, setActiveCat] = useState<string>("All");
   const [maxPrice, setMaxPrice] = useState(50);
   const [minRating, setMinRating] = useState(0);
+
+  const { data: books = [], isLoading, isError } = useQuery<Book[]>({
+    queryKey: ["books"],
+    queryFn: fetchBooks,
+  });
 
   const filtered = useMemo(() => {
     return books.filter((b) => {
@@ -21,11 +28,35 @@ const Shop = () => {
       if (query && !`${b.title} ${b.author}`.toLowerCase().includes(query.toLowerCase())) return false;
       return true;
     });
-  }, [query, activeCat, maxPrice, minRating]);
+  }, [books, query, activeCat, maxPrice, minRating]);
 
   const suggestions = query
     ? books.filter((b) => `${b.title} ${b.author}`.toLowerCase().includes(query.toLowerCase())).slice(0, 4)
     : [];
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <main className="container py-12">
+          <p className="text-center text-lg text-muted-foreground">Loading books…</p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <main className="container py-12">
+          <p className="text-center text-lg text-destructive">Unable to load books. Please try again later.</p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">

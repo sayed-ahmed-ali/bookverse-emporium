@@ -1,15 +1,58 @@
 import { useParams, Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { Star, Heart, ShoppingBag, Truck, ShieldCheck, RefreshCw } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BookCard } from "@/components/BookCard";
 import { Button } from "@/components/ui/button";
-import { books } from "@/data/books";
+import { fetchBooks, type Book } from "@/lib/books";
 import { toast } from "sonner";
 
 const BookDetails = () => {
   const { id } = useParams();
-  const book = books.find((b) => b.id === id) ?? books[0];
+  const { data: books = [], isLoading, isError } = useQuery<Book[]>({
+    queryKey: ["books"],
+    queryFn: fetchBooks,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <main className="container py-12">
+          <p className="text-center text-lg text-muted-foreground">Loading book details…</p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <main className="container py-12">
+          <p className="text-center text-lg text-destructive">Unable to load book details. Please try again later.</p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const book = books.find((b) => b.id === id);
+
+  if (!book) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <main className="container py-12">
+          <p className="text-center text-lg text-muted-foreground">Book not found.</p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   const related = books.filter((b) => b.id !== book.id && b.category === book.category).slice(0, 4);
 
   return (

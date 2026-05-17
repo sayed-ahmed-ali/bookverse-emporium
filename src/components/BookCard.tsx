@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Star, Heart } from "lucide-react";
-import type { Book } from "@/data/books";
+import type { Book } from "@/lib/books";
 import { Button } from "@/components/ui/button";
 
 export const BookCard = ({ book }: { book: Book }) => {
