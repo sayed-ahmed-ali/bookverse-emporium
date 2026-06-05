@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { categories } from "@/data/books";
 
 export const Categories = () => {
@@ -14,15 +15,15 @@ export const Categories = () => {
       </div>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
         {categories.map((c) => (
-          <a
+          <Link
             key={c.name}
-            href="#"
+            to={`/shop?category=${encodeURIComponent(c.name)}`}
             className="group flex flex-col items-center justify-center rounded-2xl border border-border bg-card p-6 text-center transition-smooth hover:-translate-y-1 hover:border-primary/40 hover:shadow-soft"
           >
             <span className="text-3xl transition-bounce group-hover:scale-110">{c.icon}</span>
             <h3 className="mt-3 font-serif text-base font-semibold">{c.name}</h3>
             <p className="text-xs text-muted-foreground">{c.count} books</p>
-          </a>
+          </Link>
         ))}
       </div>
     </section>

@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 import { Star, Heart } from "lucide-react";
 import type { Book } from "@/lib/books";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
 
 export const BookCard = ({ book }: { book: Book }) => {
+  const { addToCart } = useCart();
+
   return (
     <Link
       to={`/book/${book.id}`}
@@ -42,8 +45,28 @@ export const BookCard = ({ book }: { book: Book }) => {
         </div>
       </div>
       <div className="mt-3 flex items-center justify-between">
-        <span className="font-serif text-lg font-semibold">${book.price.toFixed(2)}</span>
-        <Button size="sm" variant="secondary" onClick={(e) => e.preventDefault()}>
+        <div className="flex flex-col gap-1">
+          <span className="font-serif text-lg font-semibold">
+            ₨{book.discountPrice ? book.discountPrice.toFixed(2) : book.price.toFixed(2)}
+          </span>
+          {book.discountPrice && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs line-through text-muted-foreground">₨{book.price.toFixed(2)}</span>
+              {book.percentage && (
+                <span className="text-xs font-semibold text-destructive">-{book.percentage}%</span>
+              )}
+            </div>
+          )}
+        </div>
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            addToCart(book, 1);
+          }}
+        >
           Add
         </Button>
       </div>

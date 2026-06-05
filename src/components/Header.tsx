@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, ShoppingBag, Heart, User, Menu, Sun, Moon, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
 
 export const Header = () => {
   const [dark, setDark] = useState(false);
   const [open, setOpen] = useState(false);
+  const { itemCount } = useCart();
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -37,8 +39,15 @@ export const Header = () => {
           <Button variant="ghost" size="icon" aria-label="Account" className="hidden sm:inline-flex">
             <User className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" aria-label="Cart">
-            <ShoppingBag className="h-5 w-5" />
+          <Button asChild variant="ghost" size="icon" aria-label="Cart">
+            <Link to="/cart" className="relative">
+              <ShoppingBag className="h-5 w-5" />
+              {itemCount > 0 && (
+                <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-destructive px-1.5 text-[11px] font-semibold text-white">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
           </Button>
           <Button
             variant="ghost"

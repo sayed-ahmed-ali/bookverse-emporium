@@ -7,6 +7,7 @@ import { BookCard } from "@/components/BookCard";
 import { Button } from "@/components/ui/button";
 import { fetchBooks, type Book } from "@/lib/books";
 import { toast } from "sonner";
+import { useCart } from "@/contexts/CartContext";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -39,6 +40,7 @@ const BookDetails = () => {
     );
   }
 
+  const { addToCart } = useCart();
   const book = books.find((b) => b.id === id);
 
   if (!book) {
@@ -94,13 +96,30 @@ const BookDetails = () => {
             <p className="mt-6 leading-relaxed text-muted-foreground">{book.description}</p>
 
             <div className="mt-8 flex items-baseline gap-3">
-              <span className="font-serif text-4xl font-semibold">${book.price.toFixed(2)}</span>
-              <span className="text-sm text-muted-foreground line-through">${(book.price * 1.25).toFixed(2)}</span>
-              <span className="rounded-full bg-accent/20 px-3 py-1 text-xs font-semibold text-accent-foreground">20% OFF</span>
+              <span className="font-serif text-4xl font-semibold">
+                ₨{book.discountPrice ? book.discountPrice.toFixed(2) : book.price.toFixed(2)}
+              </span>
+              {book.discountPrice && (
+                <>
+                  <span className="text-sm text-muted-foreground line-through">₨{book.price.toFixed(2)}</span>
+                  {book.percentage && (
+                    <span className="rounded-full bg-accent/20 px-3 py-1 text-xs font-semibold text-accent-foreground">
+                      {book.percentage}% OFF
+                    </span>
+                  )}
+                </>
+              )}
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button size="lg" className="rounded-full" onClick={() => toast.success("Added to cart")}>
+              <Button
+                size="lg"
+                className="rounded-full"
+                onClick={() => {
+                  addToCart(book, 1);
+                  toast.success("Added to cart");
+                }}
+              >
                 <ShoppingBag className="mr-2 h-4 w-4" /> Add to Cart
               </Button>
               <Button size="lg" variant="secondary" className="rounded-full">Buy Now</Button>

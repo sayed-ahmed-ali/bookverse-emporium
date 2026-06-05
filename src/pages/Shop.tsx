@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { Header } from "@/components/Header";
@@ -7,12 +8,15 @@ import { BookCard } from "@/components/BookCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { fetchBooks, type Book } from "@/lib/books";
-import { categories } from "@/data/books";
 
 const Shop = () => {
+  const location = useLocation();
+  const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const initialCategory = searchParams.get("category") ?? "All";
+
   const [query, setQuery] = useState("");
-  const [activeCat, setActiveCat] = useState<string>("All");
-  const [maxPrice, setMaxPrice] = useState(50);
+  const [activeCat, setActiveCat] = useState<string>(initialCategory);
+  const [maxPrice, setMaxPrice] = useState(0);
   const [minRating, setMinRating] = useState(0);
 
   const { data: books = [], isLoading, isError } = useQuery<Book[]>({
@@ -20,10 +24,30 @@ const Shop = () => {
     queryFn: fetchBooks,
   });
 
+  const categories = useMemo(() => {
+    const uniqueCats = Array.from(new Set(books.map((b) => b.category).filter(Boolean)));
+    return ["All", ...uniqueCats];
+  }, [books]);
+
+  const maxBookPrice = useMemo(
+    () => Math.max(0, ...books.map((b) => b.discountPrice ?? b.price)),
+    [books]
+  );
+
+  useEffect(() => {
+    if (maxBookPrice > 0) {
+      setMaxPrice((current) => (current === 0 ? maxBookPrice : current));
+    }
+  }, [maxBookPrice]);
+
+  useEffect(() => {
+    setActiveCat(initialCategory);
+  }, [initialCategory]);
+
   const filtered = useMemo(() => {
     return books.filter((b) => {
       if (activeCat !== "All" && b.category !== activeCat) return false;
-      if (b.price > maxPrice) return false;
+      if (maxPrice > 0 && (b.discountPrice ?? b.price) > maxPrice) return false;
       if (b.rating < minRating) return false;
       if (query && !`${b.title} ${b.author}`.toLowerCase().includes(query.toLowerCase())) return false;
       return true;
@@ -31,7 +55,9 @@ const Shop = () => {
   }, [books, query, activeCat, maxPrice, minRating]);
 
   const suggestions = query
-    ? books.filter((b) => `${b.title} ${b.author}`.toLowerCase().includes(query.toLowerCase())).slice(0, 4)
+    ? books
+      .filter((b) => `${b.title} ${b.author}`.toLowerCase().includes(query.toLowerCase()))
+      .slice(0, 10)
     : [];
 
   if (isLoading) {
@@ -79,9 +105,9 @@ const Shop = () => {
           {suggestions.length > 0 && query && (
             <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-border bg-popover shadow-elegant">
               {suggestions.map((s) => (
-                <button
+                <Link
                   key={s.id}
-                  onClick={() => setQuery(s.title)}
+                  to={`/book/${s.id}`}
                   className="flex w-full items-center gap-3 px-4 py-3 text-left transition-smooth hover:bg-secondary"
                 >
                   <img src={s.cover} alt="" className="h-10 w-8 rounded object-cover" />
@@ -89,7 +115,7 @@ const Shop = () => {
                     <p className="text-sm font-medium">{s.title}</p>
                     <p className="text-xs text-muted-foreground">{s.author}</p>
                   </div>
-                </button>
+                </Link>
               ))}
             </div>
           )}
@@ -100,7 +126,7 @@ const Shop = () => {
             <div>
               <h3 className="mb-3 font-serif text-base font-semibold">Category</h3>
               <div className="flex flex-wrap gap-2">
-                {["All", ...categories.map((c) => c.name)].map((c) => (
+                {categories.map((c) => (
                   <Button
                     key={c}
                     variant={activeCat === c ? "default" : "outline"}
@@ -114,11 +140,11 @@ const Shop = () => {
               </div>
             </div>
             <div>
-              <h3 className="mb-3 font-serif text-base font-semibold">Max price: ${maxPrice}</h3>
+              <h3 className="mb-3 font-serif text-base font-semibold">Max price: ₨{maxPrice}</h3>
               <input
                 type="range"
-                min={10}
-                max={50}
+                min={0}
+                max={maxBookPrice}
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
                 className="w-full accent-primary"

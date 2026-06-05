@@ -3,6 +3,8 @@ export type Book = {
     title: string;
     author: string;
     price: number;
+    discountPrice?: number;
+    percentage?: number;
     rating: number;
     reviews: number;
     category: string;
@@ -30,15 +32,17 @@ type ApiBook = {
     };
 };
 
-const API_BASE_URL = "http://192.168.100.5:8081/mehranbookstore_com";
-const IMAGE_BASE_URL = "http://192.168.100.5:8081/mehranbookstore_com";
-const BOOKS_URL = "http://192.168.100.5:8081/mehranbookstore_com/books";
+const API_BASE_URL = "http://192.168.100.15:8081/mehranbookstore_com";
+const IMAGE_BASE_URL = "http://192.168.100.15:8081/mehranbookstore_com";
+const BOOKS_URL = "http://192.168.100.15:8081/mehranbookstore_com/books";
 
 const normalizeBook = (apiBook: ApiBook): Book => ({
     id: String(apiBook.id),
     title: apiBook.name,
     author: apiBook.author?.name ?? "Unknown author",
-    price: apiBook.discountPrice ?? apiBook.price,
+    price: apiBook.price,
+    discountPrice: apiBook.discountPrice,
+    percentage: apiBook.percentage,
     rating: 4.8,
     reviews: 0,
     category: apiBook.category?.name ?? "Uncategorized",

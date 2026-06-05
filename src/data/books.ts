@@ -12,6 +12,8 @@ export type Book = {
   title: string;
   author: string;
   price: number;
+  discountPrice?: number;
+  percentage?: number;
   rating: number;
   reviews: number;
   category: string;
