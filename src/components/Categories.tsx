@@ -1,9 +1,31 @@
-import { Link } from "react-router-dom";
-import { categories } from "@/data/books";
+import { Button } from "@/components/ui/button";
+import { type Category } from "@/lib/books";
 
-export const Categories = () => {
+interface CategoriesProps {
+  categories: Category[];
+  activeCategory: string;
+  onCategorySelect: (category: string) => void;
+}
+
+const categoryIcons: Record<string, string> = {
+  fiction: "📖",
+  "non-fiction": "📚",
+  it: "💻",
+  technology: "💻",
+  philosophy: "🧠",
+  history: "🏛️",
+  kids: "🧸",
+  academic: "🎓",
+  islamic: "🕌",
+  default: "📘",
+};
+
+const getCategoryIcon = (category: string) =>
+  categoryIcons[category.toLowerCase()] ?? categoryIcons.default;
+
+export const Categories = ({ categories, activeCategory, onCategorySelect }: CategoriesProps) => {
   return (
-    <section id="categories" className="container py-20">
+    <section id="categories" className="container px-2 py-20 sm:px-3">
       <div className="mb-10 flex items-end justify-between">
         <div>
           <p className="text-sm font-medium uppercase tracking-wider text-accent">Browse</p>
@@ -13,17 +35,27 @@ export const Categories = () => {
           From timeless classics to cutting-edge tech — find your next favorite read.
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        {categories.map((c) => (
-          <Link
-            key={c.name}
-            to={`/shop?category=${encodeURIComponent(c.name)}`}
-            className="group flex flex-col items-center justify-center rounded-2xl border border-border bg-card p-6 text-center transition-smooth hover:-translate-y-1 hover:border-primary/40 hover:shadow-soft"
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+        <Button
+          size="sm"
+          variant={activeCategory === "All" ? "default" : "outline"}
+          className="group flex min-h-[80px] flex-col items-center justify-center rounded-2xl border border-border bg-card px-2 py-3 text-xs font-semibold transition-colors hover:border-primary hover:bg-primary/10 hover:text-foreground"
+          onClick={() => onCategorySelect("All")}
+        >
+          <span className="mb-1 text-2xl">📚</span>
+          <span>All</span>
+        </Button>
+        {categories.map((category) => (
+          <Button
+            key={category.id}
+            size="sm"
+            variant={activeCategory === String(category.id) ? "default" : "outline"}
+            className="group flex min-h-[80px] flex-col items-center justify-center rounded-2xl border border-border bg-card px-2 py-3 text-xs font-semibold transition-colors hover:border-primary hover:bg-primary/10 hover:text-foreground"
+            onClick={() => onCategorySelect(String(category.id))}
           >
-            <span className="text-3xl transition-bounce group-hover:scale-110">{c.icon}</span>
-            <h3 className="mt-3 font-serif text-base font-semibold">{c.name}</h3>
-            <p className="text-xs text-muted-foreground">{c.count} books</p>
-          </Link>
+            <span className="mb-1 text-2xl">{getCategoryIcon(category.name)}</span>
+            <span>{category.name}</span>
+          </Button>
         ))}
       </div>
     </section>
