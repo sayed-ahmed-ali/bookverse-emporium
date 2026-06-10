@@ -33,8 +33,10 @@ export const Header = () => {
           <Button variant="ghost" size="icon" aria-label="Search">
             <Search className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" aria-label="Wishlist" className="hidden sm:inline-flex">
-            <Heart className="h-5 w-5" />
+          <Button variant="ghost" size="icon" aria-label="Wishlist" className="hidden sm:inline-flex" asChild>
+            <Link to="/wishlist">
+              <Heart className="h-5 w-5" />
+            </Link>
           </Button>
           <Button variant="ghost" size="icon" aria-label="Account" className="hidden sm:inline-flex">
             <User className="h-5 w-5" />

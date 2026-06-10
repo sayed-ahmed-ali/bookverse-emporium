@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Minus, Plus, Trash2 } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const Cart = () => {
+    const navigate = useNavigate();
     const { cartItems, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
     const [itemToRemove, setItemToRemove] = useState<string | null>(null);
 
@@ -29,10 +30,10 @@ const Cart = () => {
                         <h1 className="mt-2 font-serif text-4xl font-semibold md:text-5xl">Shopping bag</h1>
                         <p className="mt-2 text-muted-foreground">Review the books you added, update quantities, or remove items before checkout.</p>
                     </div>
-                    <Button asChild variant="secondary" size="sm">
-                        <Link to="/shop" className="inline-flex items-center gap-2">
+                    <Button variant="secondary" size="sm" onClick={() => navigate("/shop")}>
+                        <span className="inline-flex items-center gap-2">
                             <ArrowLeft className="h-4 w-4" /> Continue shopping
-                        </Link>
+                        </span>
                     </Button>
                 </div>
 
@@ -40,8 +41,8 @@ const Cart = () => {
                     <div className="rounded-3xl border border-dashed border-border bg-muted p-12 text-center text-muted-foreground">
                         <p className="text-lg font-medium">Your cart is empty.</p>
                         <p className="mt-2">Add books from the shop and come back to view your cart history.</p>
-                        <Button asChild className="mt-6" size="sm">
-                            <Link to="/shop">Browse books</Link>
+                        <Button className="mt-6" size="sm" onClick={() => navigate("/shop")}>
+                            Browse books
                         </Button>
                     </div>
                 ) : (
@@ -139,8 +140,8 @@ const Cart = () => {
                                 <Button size="lg" className="rounded-full" onClick={() => alert("Checkout functionality coming soon!")}>
                                     Checkout
                                 </Button>
-                                <Button asChild variant="outline" size="lg" className="rounded-full">
-                                    <Link to="/shop">Continue browsing</Link>
+                                <Button variant="outline" size="lg" className="rounded-full" onClick={() => navigate("/")}>
+                                    Continue browsing
                                 </Button>
                             </div>
                         </div>

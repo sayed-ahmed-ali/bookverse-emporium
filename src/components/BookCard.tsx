@@ -3,9 +3,12 @@ import { Star, Heart } from "lucide-react";
 import type { Book } from "@/lib/books";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 export const BookCard = ({ book }: { book: Book }) => {
   const { addToCart } = useCart();
+  const { isWishlisted, toggleWishlist } = useWishlist();
+  const wishlisted = isWishlisted(book.id);
 
   return (
     <Link
@@ -28,8 +31,12 @@ export const BookCard = ({ book }: { book: Book }) => {
         )}
         <button
           aria-label="Add to wishlist"
-          onClick={(e) => e.preventDefault()}
-          className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-background/90 text-muted-foreground opacity-0 backdrop-blur transition-smooth hover:text-destructive group-hover:opacity-100"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleWishlist(book);
+          }}
+          className={`absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-background/90 transition-smooth backdrop-blur ${wishlisted ? "text-destructive" : "text-muted-foreground hover:text-destructive"}`}
         >
           <Heart className="h-4 w-4" />
         </button>

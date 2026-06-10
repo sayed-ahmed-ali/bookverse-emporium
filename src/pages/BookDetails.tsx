@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { fetchBooks, type Book } from "@/lib/books";
 import { toast } from "sonner";
 import { useCart } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -41,6 +42,7 @@ const BookDetails = () => {
   }
 
   const { addToCart } = useCart();
+  const { isWishlisted, toggleWishlist } = useWishlist();
   const book = books.find((b) => b.id === id);
 
   if (!book) {
@@ -123,8 +125,15 @@ const BookDetails = () => {
                 <ShoppingBag className="mr-2 h-4 w-4" /> Add to Cart
               </Button>
               <Button size="lg" variant="secondary" className="rounded-full">Buy Now</Button>
-              <Button size="lg" variant="outline" className="rounded-full" aria-label="Wishlist">
+              <Button
+                size="lg"
+                variant={isWishlisted(book.id) ? "destructive" : "outline"}
+                className="rounded-full"
+                aria-label="Wishlist"
+                onClick={() => toggleWishlist(book)}
+              >
                 <Heart className="h-4 w-4" />
+                <span>{isWishlisted(book.id) ? " Saved" : " Save"}</span>
               </Button>
             </div>
 
