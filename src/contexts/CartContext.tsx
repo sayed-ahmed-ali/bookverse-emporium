@@ -19,22 +19,46 @@ const CartContext = createContext<CartContextValue | undefined>(undefined);
 const CART_STORAGE_KEY = "bookverse_cart";
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-    const [cartItems, setCartItems] = useState<CartItem[]>(() => {
-        if (typeof window === "undefined") {
-            return [];
-        }
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
+    // Rehydrate from localStorage on mount to ensure consistency across environments
+    useEffect(() => {
         try {
             const stored = window.localStorage.getItem(CART_STORAGE_KEY);
-            return stored ? (JSON.parse(stored) as CartItem[]) : [];
-        } catch {
-            return [];
+            if (stored) {
+                const parsed = JSON.parse(stored) as CartItem[];
+                setCartItems(parsed);
+            }
+        } catch (e) {
+            // ignore parse errors
+            // console.warn("Failed to parse cart from storage", e);
         }
-    });
+    }, []);
 
     useEffect(() => {
-        window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+        try {
+            window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+        } catch {
+            // ignore quota / write errors
+        }
     }, [cartItems]);
+
+    // Keep cart in sync across tabs
+    useEffect(() => {
+        const onStorage = (e: StorageEvent) => {
+            if (e.key === CART_STORAGE_KEY) {
+                try {
+                    const val = e.newValue;
+                    setCartItems(val ? (JSON.parse(val) as CartItem[]) : []);
+                } catch {
+                    setCartItems([]);
+                }
+            }
+        };
+
+        window.addEventListener("storage", onStorage);
+        return () => window.removeEventListener("storage", onStorage);
+    }, []);
 
     const addToCart = (book: Book, quantity = 1) => {
         setCartItems((prev) => {

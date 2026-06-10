@@ -2,11 +2,23 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchBooks, type Book } from "@/lib/books";
 import { BookCard } from "./BookCard";
 
-export const BookGrid = ({ title, subtitle, id }: { title: string; subtitle: string; id?: string }) => {
+export const BookGrid = ({
+  title,
+  subtitle,
+  id,
+  books: providedBooks,
+}: {
+  title: string;
+  subtitle: string;
+  id?: string;
+  books?: Book[];
+}) => {
   const { data: books = [], isLoading } = useQuery<Book[]>({
     queryKey: ["books"],
     queryFn: fetchBooks,
   });
+
+  const displayBooks = providedBooks ?? books;
 
   return (
     <section id={id} className="container py-20">
@@ -17,10 +29,10 @@ export const BookGrid = ({ title, subtitle, id }: { title: string; subtitle: str
         </div>
       </div>
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
-        {isLoading ? (
+        {isLoading && !providedBooks ? (
           <div className="col-span-full py-16 text-center text-muted-foreground">Loading books...</div>
         ) : (
-          books.slice(0, 8).map((b) => (
+          displayBooks.slice(0, 8).map((b) => (
             <BookCard key={b.id} book={b} />
           ))
         )}

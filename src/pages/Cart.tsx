@@ -1,12 +1,23 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Minus, Plus, Trash2 } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const Cart = () => {
     const { cartItems, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
+    const [itemToRemove, setItemToRemove] = useState<string | null>(null);
 
     return (
         <div className="min-h-screen">
@@ -60,7 +71,17 @@ const Cart = () => {
                                             </div>
                                             <div className="flex flex-wrap items-center gap-3">
                                                 <div className="flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1">
-                                                    <Button size="icon" variant="outline" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                                                    <Button
+                                                        size="icon"
+                                                        variant="outline"
+                                                        onClick={() => {
+                                                            if (item.quantity === 1) {
+                                                                setItemToRemove(item.id);
+                                                            } else {
+                                                                updateQuantity(item.id, item.quantity - 1);
+                                                            }
+                                                        }}
+                                                    >
                                                         <Minus className="h-4 w-4" />
                                                     </Button>
                                                     <span className="min-w-[2rem] text-center text-sm font-medium">{item.quantity}</span>
@@ -68,9 +89,30 @@ const Cart = () => {
                                                         <Plus className="h-4 w-4" />
                                                     </Button>
                                                 </div>
-                                                <Button size="sm" variant="outline" onClick={() => removeFromCart(item.id)}>
-                                                    <Trash2 className="h-4 w-4" /> Remove
-                                                </Button>
+                                                <AlertDialog open={itemToRemove === item.id} onOpenChange={(open) => !open && setItemToRemove(null)}>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button size="sm" variant="outline" onClick={() => setItemToRemove(item.id)}>
+                                                            <Trash2 className="h-4 w-4" /> Remove
+                                                        </Button>
+                                                    </AlertDialogTrigger>
+                                                    <AlertDialogContent>
+                                                        <AlertDialogTitle>Remove item</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Are you sure you want to remove "{item.title}" from your cart?
+                                                        </AlertDialogDescription>
+                                                        <div className="flex gap-3">
+                                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                            <AlertDialogAction
+                                                                onClick={() => {
+                                                                    removeFromCart(item.id);
+                                                                    setItemToRemove(null);
+                                                                }}
+                                                            >
+                                                                Remove
+                                                            </AlertDialogAction>
+                                                        </div>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
                                             </div>
                                         </div>
                                         <div className="flex flex-col justify-between gap-4">
@@ -94,7 +136,7 @@ const Cart = () => {
                                 <p className="mt-2 text-3xl font-semibold">Total: ₨{totalPrice.toFixed(2)}</p>
                             </div>
                             <div className="flex flex-col gap-3 sm:flex-row">
-                                <Button size="lg" className="rounded-full">
+                                <Button size="lg" className="rounded-full" onClick={() => alert("Checkout functionality coming soon!")}>
                                     Checkout
                                 </Button>
                                 <Button asChild variant="outline" size="lg" className="rounded-full">

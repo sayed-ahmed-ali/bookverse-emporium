@@ -23,25 +23,17 @@ const Index = () => {
   });
 
   const filteredBooks = useMemo(() => {
-    if (activeCategory === "All") {
-      return books;
+    if (activeCategory === "All") return books;
+
+    // Prefer matching by categoryId when available
+    const selectedById = categories.find((c) => String(c.id) === activeCategory);
+    if (selectedById) {
+      return books.filter((book) => String(book.categoryId ?? "") === String(selectedById.id));
     }
 
-    const selectedCategory = categories.find((c) => String(c.id) === activeCategory);
-    const activeName = selectedCategory ? selectedCategory.name : activeCategory;
-    const normalize = (s?: string) =>
-      (s ?? "").toString().trim().toLowerCase().replace(/[^a-z0-9]+/g, " ");
-    const normActiveName = normalize(activeName);
-
-    return books.filter((book) => {
-      if (activeCategory && book.categoryId && book.categoryId === activeCategory) return true;
-      const normBook = normalize(book.category);
-      return (
-        normBook === normActiveName ||
-        normBook.includes(normActiveName) ||
-        normActiveName.includes(normBook)
-      );
-    });
+    // Otherwise try matching by category name (case-insensitive exact match)
+    const activeName = (activeCategory ?? "").toString().trim().toLowerCase();
+    return books.filter((book) => (book.category ?? "").toString().trim().toLowerCase() === activeName);
   }, [books, activeCategory, categories]);
 
   const title =
@@ -62,6 +54,7 @@ const Index = () => {
           categories={categories}
           activeCategory={activeCategory}
           onCategorySelect={setActiveCategory}
+          navigateOnSelect={false}
         />
         <BookGrid id="bestsellers" title={title} subtitle={subtitle} books={filteredBooks} />
         <Testimonials />
