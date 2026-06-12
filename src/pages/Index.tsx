@@ -7,6 +7,10 @@ import { Categories } from "@/components/Categories";
 import { BookGrid } from "@/components/BookGrid";
 import { Testimonials } from "@/components/Testimonials";
 import { Newsletter } from "@/components/Newsletter";
+import { StatsCards } from "@/components/StatsCards";
+import { FeaturesSection } from "@/components/FeaturesSection";
+import { TrendingNow } from "@/components/TrendingNow";
+import { NewArrivals } from "@/components/NewArrivals";
 import { fetchBooks, fetchCategories, type Book, type Category } from "@/lib/books";
 
 const Index = () => {
@@ -50,13 +54,23 @@ const Index = () => {
       <Header />
       <main>
         <Hero />
+        <StatsCards />
         <Categories
           categories={categories}
           activeCategory={activeCategory}
           onCategorySelect={setActiveCategory}
           navigateOnSelect={false}
+          id="categories"
         />
-        <BookGrid id="bestsellers" title={title} subtitle={subtitle} books={filteredBooks} />
+        {activeCategory !== "All" && (
+          <BookGrid id="bestsellers" title={title} subtitle={subtitle} books={filteredBooks} />
+        )}
+        <TrendingNow />
+        <NewArrivals />
+        {activeCategory === "All" && (
+          <BookGrid id="bestsellers" title={title} subtitle={subtitle} books={filteredBooks} />
+        )}
+        <FeaturesSection />
         <Testimonials />
         <Newsletter />
       </main>

@@ -56,7 +56,7 @@ export const Hero = () => {
           </div>
           <div className="absolute -bottom-6 -left-6 hidden rounded-2xl bg-card p-4 shadow-book md:block">
             <p className="font-serif text-sm font-semibold">Free shipping</p>
-            <p className="text-xs text-muted-foreground">On orders over $35</p>
+            <p className="text-xs text-muted-foreground">On orders over 5000</p>
           </div>
         </div>
       </div>

@@ -26,7 +26,8 @@ export const Header = () => {
           <Link to="/shop" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Shop</Link>
           <a href="#categories" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Categories</a>
           <a href="#bestsellers" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Bestsellers</a>
-          <a href="#blog" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Blog</a>
+          <a href="#trending" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">New Arrivals</a>
+          <a href="#deals" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Deals</a>
         </nav>
 
         <div className="flex items-center gap-1">
@@ -37,9 +38,6 @@ export const Header = () => {
             <Link to="/wishlist">
               <Heart className="h-5 w-5" />
             </Link>
-          </Button>
-          <Button variant="ghost" size="icon" aria-label="Account" className="hidden sm:inline-flex">
-            <User className="h-5 w-5" />
           </Button>
           <Button asChild variant="ghost" size="icon" aria-label="Cart">
             <Link to="/cart" className="relative">
@@ -77,7 +75,8 @@ export const Header = () => {
           <Link to="/shop" className="text-sm font-medium" onClick={() => setOpen(false)}>Shop</Link>
           <a href="#categories" className="text-sm font-medium" onClick={() => setOpen(false)}>Categories</a>
           <a href="#bestsellers" className="text-sm font-medium" onClick={() => setOpen(false)}>Bestsellers</a>
-          <a href="#blog" className="text-sm font-medium" onClick={() => setOpen(false)}>Blog</a>
+          <a href="#trending" className="text-sm font-medium" onClick={() => setOpen(false)}>New Arrivals</a>
+          <a href="#deals" className="text-sm font-medium" onClick={() => setOpen(false)}>Deals</a>
         </nav>
       )}
     </header>
