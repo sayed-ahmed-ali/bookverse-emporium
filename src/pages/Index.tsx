@@ -7,7 +7,6 @@ import { Categories } from "@/components/Categories";
 import { BookGrid } from "@/components/BookGrid";
 import { Testimonials } from "@/components/Testimonials";
 import { Newsletter } from "@/components/Newsletter";
-import { StatsCards } from "@/components/StatsCards";
 import { FeaturesSection } from "@/components/FeaturesSection";
 import { TrendingNow } from "@/components/TrendingNow";
 import { NewArrivals } from "@/components/NewArrivals";
@@ -54,7 +53,6 @@ const Index = () => {
       <Header />
       <main>
         <Hero />
-        <StatsCards />
         <Categories
           categories={categories}
           activeCategory={activeCategory}

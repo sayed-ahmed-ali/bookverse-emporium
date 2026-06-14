@@ -1,9 +1,27 @@
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { ArrowRight, Search, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { fetchBooks, type Book } from "@/lib/books";
 import heroBooks from "@/assets/hero-books.jpg";
 
 export const Hero = () => {
+  const [query, setQuery] = useState("");
+
+  const { data: books = [] } = useQuery<Book[]>({
+    queryKey: ["books"],
+    queryFn: fetchBooks,
+  });
+
+  const suggestions = useMemo(() => {
+    if (!query) return [];
+    return books
+      .filter((b) => `${b.title} ${b.author}`.toLowerCase().includes(query.toLowerCase()))
+      .slice(0, 10);
+  }, [books, query]);
+
   return (
     <section className="relative overflow-hidden bg-gradient-hero">
       <div className="container grid gap-12 py-16 md:grid-cols-2 md:py-24 md:gap-8 items-center">
@@ -18,6 +36,34 @@ export const Hero = () => {
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted-foreground">
             Discover thousands of carefully curated books across fiction, non-fiction, academic and more — at BookVerse, the home of thoughtful readers.
           </p>
+
+          <div className="relative mt-8 max-w-lg">
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search books, authors..."
+              className="h-12 rounded-full pl-11"
+            />
+            {suggestions.length > 0 && query && (
+              <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-border bg-popover shadow-elegant">
+                {suggestions.map((s) => (
+                  <Link
+                    key={s.id}
+                    to={`/book/${s.id}`}
+                    className="flex w-full items-center gap-3 px-4 py-3 text-left transition-smooth hover:bg-secondary"
+                  >
+                    <img src={s.cover} alt="" className="h-10 w-8 rounded object-cover" />
+                    <div>
+                      <p className="text-sm font-medium">{s.title}</p>
+                      <p className="text-xs text-muted-foreground">{s.author}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg" className="rounded-full">
               <Link to="/shop">
@@ -27,20 +73,6 @@ export const Hero = () => {
             <Button asChild size="lg" variant="outline" className="rounded-full">
               <a href="#bestsellers">Browse Bestsellers</a>
             </Button>
-          </div>
-          <div className="mt-10 flex items-center gap-8 text-sm">
-            <div>
-              <p className="font-serif text-2xl font-semibold">10k+</p>
-              <p className="text-muted-foreground">Books</p>
-            </div>
-            <div>
-              <p className="font-serif text-2xl font-semibold">4.9★</p>
-              <p className="text-muted-foreground">Reader rating</p>
-            </div>
-            <div>
-              <p className="font-serif text-2xl font-semibold">50k+</p>
-              <p className="text-muted-foreground">Happy readers</p>
-            </div>
           </div>
         </div>
 
