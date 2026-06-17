@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, ShoppingBag, Heart, User, Menu, Sun, Moon, BookOpen } from "lucide-react";
+import { ShoppingBag, Heart, User, Menu, Sun, Moon, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 export const Header = () => {
   const [dark, setDark] = useState(false);
   const [open, setOpen] = useState(false);
   const { itemCount } = useCart();
+  const { wishlistedIds } = useWishlist();
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -30,13 +32,15 @@ export const Header = () => {
           <a href="#deals" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Deals</a>
         </nav>
 
-        <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" aria-label="Search">
-            <Search className="h-5 w-5" />
-          </Button>
+        <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" aria-label="Wishlist" className="hidden sm:inline-flex" asChild>
-            <Link to="/wishlist">
+            <Link to="/wishlist" className="relative">
               <Heart className="h-5 w-5" />
+              {wishlistedIds.length > 0 && (
+                <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-white">
+                  {wishlistedIds.length}
+                </span>
+              )}
             </Link>
           </Button>
           <Button asChild variant="ghost" size="icon" aria-label="Cart">

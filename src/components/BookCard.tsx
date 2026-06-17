@@ -4,6 +4,7 @@ import type { Book } from "@/lib/books";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
+import { toast } from "@/components/ui/use-toast";
 
 export const BookCard = ({ book }: { book: Book }) => {
   const { addToCart } = useCart();
@@ -13,7 +14,7 @@ export const BookCard = ({ book }: { book: Book }) => {
   return (
     <Link
       to={`/book/${book.id}`}
-      className="group relative flex flex-col overflow-hidden rounded-2xl bg-card p-4 transition-smooth hover:shadow-elegant"
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-card p-4 transition-smooth hover:shadow-elegant"
     >
       <div className="relative mb-4 aspect-[2/3] overflow-hidden rounded-lg bg-muted">
         <img
@@ -30,15 +31,16 @@ export const BookCard = ({ book }: { book: Book }) => {
           </span>
         )}
         <button
-          aria-label="Add to wishlist"
+          aria-pressed={wishlisted}
+          aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             toggleWishlist(book);
           }}
-          className={`absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-background/90 transition-smooth backdrop-blur ${wishlisted ? "text-destructive" : "text-muted-foreground hover:text-destructive"}`}
+          className={`absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full transition-smooth backdrop-blur ${wishlisted ? "bg-destructive/15 text-destructive" : "bg-background/90 text-muted-foreground hover:text-destructive"}`}
         >
-          <Heart className="h-4 w-4" />
+          <Heart className={`h-4 w-4 ${wishlisted ? "fill-destructive text-destructive" : ""}`} fill={wishlisted ? "currentColor" : "none"} stroke="currentColor" />
         </button>
       </div>
       <div className="flex-1">
@@ -72,6 +74,7 @@ export const BookCard = ({ book }: { book: Book }) => {
             e.preventDefault();
             e.stopPropagation();
             addToCart(book, 1);
+            toast({ title: "Added to cart", description: `${book.title} has been added to your cart.` });
           }}
         >
           Add

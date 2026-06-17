@@ -19,22 +19,18 @@ const Cart = () => {
     const navigate = useNavigate();
     const { cartItems, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
     const [itemToRemove, setItemToRemove] = useState<string | null>(null);
+    const [confirmClear, setConfirmClear] = useState(false);
 
     return (
         <div className="min-h-screen">
             <Header />
             <main className="container py-12">
-                <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="mb-10">
                     <div>
                         <p className="text-sm font-medium uppercase tracking-wider text-accent">Your Cart</p>
                         <h1 className="mt-2 font-serif text-4xl font-semibold md:text-5xl">Shopping bag</h1>
                         <p className="mt-2 text-muted-foreground">Review the books you added, update quantities, or remove items before checkout.</p>
                     </div>
-                    <Button variant="secondary" size="sm" onClick={() => navigate("/shop")}>
-                        <span className="inline-flex items-center gap-2">
-                            <ArrowLeft className="h-4 w-4" /> Continue shopping
-                        </span>
-                    </Button>
                 </div>
 
                 {cartItems.length === 0 ? (
@@ -48,14 +44,35 @@ const Cart = () => {
                 ) : (
                     <div className="space-y-8">
                         <div className="rounded-3xl border border-border bg-card p-6">
-                            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="mb-6">
                                 <div>
                                     <p className="text-sm text-muted-foreground">You have added</p>
                                     <h2 className="text-2xl font-semibold">{itemCount} book{itemCount === 1 ? "" : "s"} in your cart</h2>
                                 </div>
-                                <Button variant="destructive" size="sm" onClick={clearCart}>
-                                    Clear cart
-                                </Button>
+                                <AlertDialog open={confirmClear} onOpenChange={(open) => !open && setConfirmClear(false)}>
+                                    <AlertDialogTrigger asChild>
+                                        <Button variant="destructive" size="sm">
+                                            Clear cart
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogTitle>Clear cart</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            Do you want to delete all items from your cart?
+                                        </AlertDialogDescription>
+                                        <div className="flex gap-3 pt-4">
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction
+                                                onClick={() => {
+                                                    clearCart();
+                                                    setConfirmClear(false);
+                                                }}
+                                            >
+                                                Yes, clear cart
+                                            </AlertDialogAction>
+                                        </div>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </div>
 
                             <div className="space-y-4">
@@ -141,7 +158,7 @@ const Cart = () => {
                                     Checkout
                                 </Button>
                                 <Button variant="outline" size="lg" className="rounded-full" onClick={() => navigate("/")}>
-                                    Continue browsing
+                                    Continue shopping
                                 </Button>
                             </div>
                         </div>

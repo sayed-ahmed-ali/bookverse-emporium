@@ -29,7 +29,7 @@ export const TrendingNow = () => {
                     Discover the most popular books this season handpicked for you.
                 </p>
             </div>
-            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-fr">
                 {trendingBooks.map((book) => (
                     <BookCard key={book.id} book={book} />
                 ))}
