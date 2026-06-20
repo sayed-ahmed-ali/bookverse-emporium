@@ -1,10 +1,25 @@
 import { Link } from "react-router-dom";
 import { Star, Heart } from "lucide-react";
 import type { Book } from "@/lib/books";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { toast } from "@/components/ui/use-toast";
+
+const badgeStyles = (badge: string) => {
+  const type = badge.trim().toLowerCase();
+  if (type.includes("bestseller")) {
+    return "bg-primary/10 text-primary border border-primary/20";
+  }
+  if (type === "new") {
+    return "bg-secondary/10 text-secondary border border-secondary/20";
+  }
+  if (type.includes("trending")) {
+    return "bg-accent/10 text-accent border border-accent/20";
+  }
+  return "bg-muted text-foreground border border-border";
+};
 
 export const BookCard = ({ book }: { book: Book }) => {
   const { addToCart } = useCart();
@@ -26,9 +41,9 @@ export const BookCard = ({ book }: { book: Book }) => {
           className="h-full w-full object-cover transition-bounce group-hover:scale-105"
         />
         {book.badge && (
-          <span className="absolute left-3 top-3 rounded-full bg-gradient-accent px-3 py-1 text-xs font-semibold text-accent-foreground shadow-soft">
+          <Badge className={`absolute left-3 top-3 rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.15em] shadow-soft ${badgeStyles(book.badge)}`}>
             {book.badge}
-          </span>
+          </Badge>
         )}
         <button
           aria-pressed={wishlisted}

@@ -26,6 +26,12 @@ const categoryIcons: Record<string, string> = {
 const getCategoryIcon = (category: string) =>
   categoryIcons[category.toLowerCase()] ?? categoryIcons.default;
 
+const categoryButtonClasses = (active: boolean) =>
+  `group flex min-h-[80px] flex-col items-center justify-center rounded-2xl px-2 py-3 text-xs font-semibold transition-colors ${active
+    ? "border-transparent bg-primary text-primary-foreground shadow-soft"
+    : "border border-border bg-card text-muted-foreground hover:border-primary hover:bg-primary/10 hover:text-foreground"
+  }`;
+
 export const Categories = ({ categories, activeCategory, onCategorySelect, navigateOnSelect = false }: CategoriesProps) => {
   const navigate = useNavigate();
   return (
@@ -42,8 +48,8 @@ export const Categories = ({ categories, activeCategory, onCategorySelect, navig
       <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
         <Button
           size="sm"
-          variant={activeCategory === "All" ? "default" : "outline"}
-          className="group flex min-h-[80px] flex-col items-center justify-center rounded-2xl border border-border bg-card px-2 py-3 text-xs font-semibold transition-colors hover:border-primary hover:bg-primary/10 hover:text-foreground"
+          variant="ghost"
+          className={categoryButtonClasses(activeCategory === "All")}
           onClick={() => {
             onCategorySelect("All");
             if (navigateOnSelect) navigate("/shop");
@@ -56,12 +62,11 @@ export const Categories = ({ categories, activeCategory, onCategorySelect, navig
           <Button
             key={category.id}
             size="sm"
-            variant={activeCategory === String(category.id) ? "default" : "outline"}
-            className="group flex min-h-[80px] flex-col items-center justify-center rounded-2xl border border-border bg-card px-2 py-3 text-xs font-semibold transition-colors hover:border-primary hover:bg-primary/10 hover:text-foreground"
+            variant="ghost"
+            className={categoryButtonClasses(activeCategory === String(category.id))}
             onClick={() => {
               onCategorySelect(String(category.id));
               if (navigateOnSelect) {
-                // navigate to the shop page with the category name so `/shop` can pick it up
                 navigate(`/shop?category=${encodeURIComponent(category.name)}`);
               }
             }}

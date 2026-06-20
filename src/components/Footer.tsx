@@ -1,5 +1,4 @@
 import { BookOpen } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export const Footer = () => {
   return (
@@ -19,12 +18,37 @@ export const Footer = () => {
         {/* Shop Column */}
         <div>
           <h4 className="mb-4 font-serif text-base font-semibold">Shop</h4>
-          <ul className="space-y-2.5 text-sm">
-            <li><a href="/shop" className="text-muted-foreground hover:text-foreground transition-colors">All Books</a></li>
-            <li><a href="/shop" className="text-muted-foreground hover:text-foreground transition-colors">Fiction</a></li>
-            <li><a href="/shop" className="text-muted-foreground hover:text-foreground transition-colors">Non-Fiction</a></li>
-            <li><a href="/shop" className="text-muted-foreground hover:text-foreground transition-colors">Academic</a></li>
-            <li><a href="/shop" className="text-muted-foreground hover:text-foreground transition-colors">Kids</a></li>
+          <ul className="flex flex-wrap gap-4 text-sm">
+            <li>
+              <a href="/shop" className="rounded-full px-3 py-1 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-foreground">
+                Shop
+              </a>
+            </li>
+            <li>
+              <a href="/shop" className="rounded-full px-3 py-1 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-foreground">
+                All Books
+              </a>
+            </li>
+            <li>
+              <a href="/shop?category=fiction" className="rounded-full px-3 py-1 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-foreground">
+                Fiction
+              </a>
+            </li>
+            <li>
+              <a href="/shop?category=non-fiction" className="rounded-full px-3 py-1 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-foreground">
+                Non-Fiction
+              </a>
+            </li>
+            <li>
+              <a href="/shop?category=academic" className="rounded-full px-3 py-1 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-foreground">
+                Academic
+              </a>
+            </li>
+            <li>
+              <a href="/shop?category=kids" className="rounded-full px-3 py-1 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-foreground">
+                Kids
+              </a>
+            </li>
           </ul>
         </div>
 

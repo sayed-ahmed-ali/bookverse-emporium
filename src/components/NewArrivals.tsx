@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { BookCard } from "@/components/BookCard";
-import { Badge } from "@/components/ui/badge";
 import { fetchBooks, type Book } from "@/lib/books";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
@@ -13,8 +12,6 @@ export const NewArrivals = () => {
 
     const shuffledBooks = [...books].sort(() => 0.5 - Math.random());
     const newArrivals = shuffledBooks.slice(0, 6);
-
-    const badgeTypes = ["New", "Bestseller", "Editor's Pick"];
 
     if (isLoading) {
         return (
@@ -39,20 +36,8 @@ export const NewArrivals = () => {
                 </Link>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-fr">
-                {newArrivals.map((book, index) => (
-                    <div key={book.id} className="relative">
-                        <BookCard book={book} />
-                        {index < 3 && (
-                            <div className="absolute right-2 top-2 z-10">
-                                <Badge
-                                    variant={index === 0 ? "default" : index === 1 ? "secondary" : "outline"}
-                                    className="font-semibold"
-                                >
-                                    {badgeTypes[index]}
-                                </Badge>
-                            </div>
-                        )}
-                    </div>
+                {newArrivals.map((book) => (
+                    <BookCard key={book.id} book={book} />
                 ))}
             </div>
         </section>
