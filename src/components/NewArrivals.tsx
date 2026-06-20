@@ -38,7 +38,7 @@ export const NewArrivals = () => {
                     View All <ArrowRight className="h-4 w-4" />
                 </Link>
             </div>
-            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-fr">
                 {newArrivals.map((book, index) => (
                     <div key={book.id} className="relative">
                         <BookCard book={book} />

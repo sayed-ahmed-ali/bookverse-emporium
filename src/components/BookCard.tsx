@@ -14,7 +14,7 @@ export const BookCard = ({ book }: { book: Book }) => {
   return (
     <Link
       to={`/book/${book.id}`}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-card p-4 transition-smooth hover:shadow-elegant"
+      className="group relative flex flex-col overflow-hidden rounded-2xl bg-card p-4 transition-smooth hover:shadow-elegant"
     >
       <div className="relative mb-4 aspect-[2/3] overflow-hidden rounded-lg bg-muted">
         <img

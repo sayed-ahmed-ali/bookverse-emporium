@@ -38,10 +38,10 @@ type ApiBook = {
     };
 };
 
-const API_BASE_URL = "http://192.168.100.8:8081/mehranbookstore_com";
-const IMAGE_BASE_URL = "http://192.168.100.8:8081/mehranbookstore_com";
-const BOOKS_URL = "http://192.168.100.8:8081/mehranbookstore_com/books";
-const CATEGORIES_URL = "http://192.168.100.8:8081/mehranbookstore_com/categories";
+const API_BASE_URL = "http://192.168.100.13:8081/mehranbookstore_com";
+const IMAGE_BASE_URL = "http://192.168.100.13:8081/mehranbookstore_com";
+const BOOKS_URL = "http://192.168.100.13:8081/mehranbookstore_com/books";
+const CATEGORIES_URL = "http://192.168.100.13:8081/mehranbookstore_com/categories";
 
 const normalizeBook = (apiBook: ApiBook): Book => ({
     id: String(apiBook.id),
