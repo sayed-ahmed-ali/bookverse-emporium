@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => ({
     },
     proxy: {
       "/api": {
-        target: "http://192.168.100.14:8081/mehranbookstore_com",
+        target: "http://192.168.100.17:8081/mehranbookstore_com",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ""),

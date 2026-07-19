@@ -41,9 +41,6 @@ export const Categories = ({ categories, activeCategory, onCategorySelect, navig
           <p className="text-sm font-medium uppercase tracking-wider text-accent">Browse</p>
           <h2 className="mt-2 font-serif text-4xl font-semibold md:text-5xl">Shop by category</h2>
         </div>
-        <p className="hidden max-w-sm text-sm text-muted-foreground md:block">
-          From timeless classics to cutting-edge tech — find your next favorite read.
-        </p>
       </div>
       <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
         <Button

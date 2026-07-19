@@ -9,6 +9,8 @@ import Shop from "./pages/Shop.tsx";
 import Cart from "./pages/Cart.tsx";
 import BookDetails from "./pages/BookDetails.tsx";
 import Wishlist from "./pages/Wishlist.tsx";
+import CategoriesPage from "./pages/CategoriesPage.tsx";
+import BestSellersPage from "./pages/BestSellersPage.tsx";
 import { CartProvider } from "@/contexts/CartContext";
 import { WishlistProvider } from "@/contexts/WishlistContext";
 
@@ -25,6 +27,8 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/shop" element={<Shop />} />
+              <Route path="/categories" element={<CategoriesPage />} />
+              <Route path="/best-sellers" element={<BestSellersPage />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/book/:id" element={<BookDetails />} />

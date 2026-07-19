@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BookCard } from "@/components/BookCard";
+import { BuyNowPanel } from "@/components/BuyNowPanel";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { fetchBooks, type Book } from "@/lib/books";
@@ -173,6 +174,7 @@ const Shop = () => {
             </div>
           </div>
         </div>
+        <BuyNowPanel />
       </main>
       <Footer />
     </div>

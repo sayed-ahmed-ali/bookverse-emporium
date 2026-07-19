@@ -26,10 +26,10 @@ export const Header = () => {
         <nav className="hidden items-center gap-8 md:flex">
           <Link to="/" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Home</Link>
           <Link to="/shop" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Shop</Link>
-          <a href="#categories" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Categories</a>
-          <a href="#bestsellers" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Bestsellers</a>
-          <a href="#trending" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">New Arrivals</a>
-          <a href="#deals" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Deals</a>
+          <Link to="/categories" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Categories</Link>
+          <Link to="/best-sellers" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Best Sellers</Link>
+          <Link to="/shop" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">New Arrivals</Link>
+          <Link to="/shop" className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground">Deals</Link>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -77,10 +77,10 @@ export const Header = () => {
         <nav className="container flex flex-col gap-3 border-t border-border/60 py-4 md:hidden">
           <Link to="/" className="text-sm font-medium" onClick={() => setOpen(false)}>Home</Link>
           <Link to="/shop" className="text-sm font-medium" onClick={() => setOpen(false)}>Shop</Link>
-          <a href="#categories" className="text-sm font-medium" onClick={() => setOpen(false)}>Categories</a>
-          <a href="#bestsellers" className="text-sm font-medium" onClick={() => setOpen(false)}>Bestsellers</a>
-          <a href="#trending" className="text-sm font-medium" onClick={() => setOpen(false)}>New Arrivals</a>
-          <a href="#deals" className="text-sm font-medium" onClick={() => setOpen(false)}>Deals</a>
+          <Link to="/categories" className="text-sm font-medium" onClick={() => setOpen(false)}>Categories</Link>
+          <Link to="/best-sellers" className="text-sm font-medium" onClick={() => setOpen(false)}>Best Sellers</Link>
+          <Link to="/shop" className="text-sm font-medium" onClick={() => setOpen(false)}>New Arrivals</Link>
+          <Link to="/shop" className="text-sm font-medium" onClick={() => setOpen(false)}>Deals</Link>
         </nav>
       )}
     </header>
