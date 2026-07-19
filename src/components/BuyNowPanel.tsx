@@ -1,9 +1,33 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { buildWhatsAppMessage, createWhatsAppUrl } from "@/lib/checkout";
+import { toast } from "@/components/ui/use-toast";
 
 export const BuyNowPanel = () => {
     const { selectedBooks, updateSelectedQuantity, removeSelectedBook, selectedTotal } = useCart();
+
+    const handleBuyNow = () => {
+        if (selectedBooks.length === 0) {
+            toast({
+                title: "No books selected",
+                description: "Please select at least one book.",
+            });
+            return;
+        }
+
+        const message = buildWhatsAppMessage(
+            selectedBooks.map((book) => ({
+                id: book.id,
+                title: book.title,
+                price: book.price,
+                quantity: book.quantity,
+            }))
+        );
+
+        const url = createWhatsAppUrl(message);
+        window.open(url, "_blank", "noopener,noreferrer");
+    };
 
     return (
         <section className="sticky bottom-4 z-30 mt-10 rounded-3xl border border-border/70 bg-card/95 p-4 shadow-elegant backdrop-blur md:p-6">
@@ -11,8 +35,11 @@ export const BuyNowPanel = () => {
                 <div>
                     <p className="text-sm font-medium uppercase tracking-[0.2em] text-accent">Quick order</p>
                     <h3 className="mt-1 font-serif text-2xl font-semibold">Selected books</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">Adjust quantities and review your selection.</p>
+                    <p className="mt-1 text-sm text-muted-foreground">Adjust quantities and send your order directly on WhatsApp.</p>
                 </div>
+                <Button size="lg" className="rounded-full" onClick={handleBuyNow}>
+                    Buy Now
+                </Button>
             </div>
 
             {selectedBooks.length === 0 ? (

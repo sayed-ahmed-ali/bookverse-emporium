@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { buildWhatsAppMessage, createWhatsAppUrl } from "@/lib/checkout";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -20,6 +21,24 @@ const Cart = () => {
     const { cartItems, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
     const [itemToRemove, setItemToRemove] = useState<string | null>(null);
     const [confirmClear, setConfirmClear] = useState(false);
+
+    const handleCheckout = () => {
+        if (cartItems.length === 0) {
+            return;
+        }
+
+        const message = buildWhatsAppMessage(
+            cartItems.map((item) => ({
+                id: item.id,
+                title: item.title,
+                price: item.discountPrice ?? item.price,
+                quantity: item.quantity,
+            }))
+        );
+
+        const url = createWhatsAppUrl(message);
+        window.open(url, "_blank", "noopener,noreferrer");
+    };
 
     return (
         <div className="min-h-screen">
@@ -154,7 +173,7 @@ const Cart = () => {
                                 <p className="mt-2 text-3xl font-semibold">Total: ₨{totalPrice.toFixed(2)}</p>
                             </div>
                             <div className="flex flex-col gap-3 sm:flex-row">
-                                <Button size="lg" className="rounded-full" onClick={() => alert("Checkout functionality coming soon!")}>
+                                <Button size="lg" className="rounded-full" onClick={handleCheckout}>
                                     Checkout
                                 </Button>
                                 <Button variant="outline" size="lg" className="rounded-full" onClick={() => navigate("/")}>
