@@ -70,14 +70,18 @@ const Cart = () => {
                                 </div>
                                 <AlertDialog open={confirmClear} onOpenChange={(open) => !open && setConfirmClear(false)}>
                                     <AlertDialogTrigger asChild>
-                                        <Button variant="destructive" size="sm">
+                                        <Button
+                                            variant="destructive"
+                                            size="sm"
+                                            onClick={() => setConfirmClear(true)}
+                                        >
                                             Clear cart
                                         </Button>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
                                         <AlertDialogTitle>Clear cart</AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            Do you want to delete all items from your cart?
+                                            Do you want to delete all books from your cart?
                                         </AlertDialogDescription>
                                         <div className="flex gap-3 pt-4">
                                             <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -174,7 +178,7 @@ const Cart = () => {
                             </div>
                             <div className="flex flex-col gap-3 sm:flex-row">
                                 <Button size="lg" className="rounded-full" onClick={handleCheckout}>
-                                    Checkout
+                                    Buy now
                                 </Button>
                                 <Button variant="outline" size="lg" className="rounded-full" onClick={() => navigate("/")}>
                                     Continue shopping
